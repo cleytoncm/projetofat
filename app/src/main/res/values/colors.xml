@@ -1,0 +1,11 @@
+<?xml version="1.0" encoding="utf-8"?>
+<resources>
+    <color name="black">#FF000000</color>
+    <color name="white">#FFFFFFFF</color>
+
+    <color name="creme_quente">#FFF8E1</color>
+    <color name="verde_menta_suave">#98D8C8</color>
+    <color name="pessego_claro">#FFDAB9</color>
+    <color name="azul_acinzentado">#6A8EAE</color>
+    <color name="terracota_suave">#E07A5F</color>
+</resources>
