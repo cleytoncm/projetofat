@@ -1,5 +1,6 @@
 package com.app.lanchonete;
 
+import android.content.Intent;
 import android.os.Bundle;
 import android.util.Patterns;
 import android.view.View;
@@ -45,9 +46,13 @@ public class FormularioActivity extends AppCompatActivity {
                         errorFocusView = etEmail;
                     }
                     withError = true;
-                }
-
-                if (!Patterns.EMAIL_ADDRESS.matcher(email).matches()) {
+                } else if (email.length() < 5) {
+                    etEmail.setError("O e-mail precisa conter no mínimo 5 caracteres");
+                    if (errorFocusView == null) {
+                        errorFocusView = etEmail;
+                    }
+                    withError = true;
+                } else if (!Patterns.EMAIL_ADDRESS.matcher(email).matches()) {
                     if (errorFocusView == null) {
                         etEmail.setError("Informe um e-mail válido");
                         errorFocusView = etEmail;
@@ -76,6 +81,8 @@ public class FormularioActivity extends AppCompatActivity {
                     Toast.makeText(FormularioActivity.this, "Preencha todos os campos", Toast.LENGTH_SHORT).show();
                 } else {
                     Toast.makeText(FormularioActivity.this, "Logado com sucesso...", Toast.LENGTH_SHORT).show();
+                    Intent intent = new Intent(FormularioActivity.this, MainActivity.class);
+                    startActivity(intent);
                 }
 
             }
