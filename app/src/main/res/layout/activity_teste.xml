@@ -1,0 +1,113 @@
+<?xml version="1.0" encoding="utf-8"?>
+<androidx.constraintlayout.widget.ConstraintLayout xmlns:android="http://schemas.android.com/apk/res/android"
+    xmlns:app="http://schemas.android.com/apk/res-auto"
+    xmlns:tools="http://schemas.android.com/tools"
+    android:id="@+id/main"
+    android:layout_width="match_parent"
+    android:layout_height="match_parent"
+    tools:context=".TesteActivity">
+
+    <EditText
+        android:id="@+id/etNomePessoa"
+        android:layout_width="200dp"
+        android:layout_height="45dp"
+        android:hint="Digite o nome"
+        app:layout_constraintTop_toTopOf="parent"
+        app:layout_constraintStart_toStartOf="parent"
+        app:layout_constraintEnd_toEndOf="parent"
+        android:layout_marginTop="25dp"
+        />
+
+    <EditText
+        android:id="@+id/etIdadePessoa"
+        android:layout_width="200dp"
+        android:layout_height="45dp"
+        android:hint="Digite a idade"
+        app:layout_constraintTop_toBottomOf="@+id/etNomePessoa"
+        app:layout_constraintStart_toStartOf="parent"
+        app:layout_constraintEnd_toEndOf="parent"
+        android:layout_marginTop="25dp"
+        />
+
+    <EditText
+        android:id="@+id/etEmailPessoa"
+        android:layout_width="200dp"
+        android:layout_height="45dp"
+        android:hint="Digite o e-mail"
+        app:layout_constraintTop_toBottomOf="@+id/etIdadePessoa"
+        app:layout_constraintStart_toStartOf="parent"
+        app:layout_constraintEnd_toEndOf="parent"
+        android:layout_marginTop="25dp"
+        />
+
+    <EditText
+        android:id="@+id/etTelefonePessoa"
+        android:layout_width="200dp"
+        android:layout_height="45dp"
+        android:hint="Digite o telefone"
+        app:layout_constraintTop_toBottomOf="@+id/etEmailPessoa"
+        app:layout_constraintStart_toStartOf="parent"
+        app:layout_constraintEnd_toEndOf="parent"
+        android:layout_marginTop="25dp"
+        />
+
+    <Button
+        android:id="@+id/btnCadastrarPessoa"
+        android:layout_width="200dp"
+        android:layout_height="45dp"
+        android:layout_marginTop="25dp"
+        android:onClick="cadastrar"
+        android:text="Cadastrar"
+        app:layout_constraintEnd_toEndOf="parent"
+        app:layout_constraintStart_toStartOf="parent"
+        app:layout_constraintTop_toBottomOf="@+id/etTelefonePessoa" />
+
+    <TextView
+        android:id="@+id/tvNomePessoa"
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content"
+        android:text="Nome da pessoa"
+        android:textSize="25dp"
+        app:layout_constraintTop_toBottomOf="@+id/btnCadastrarPessoa"
+        app:layout_constraintStart_toStartOf="parent"
+        app:layout_constraintEnd_toEndOf="parent"
+        android:layout_marginTop="25dp"
+        />
+
+    <TextView
+        android:id="@+id/tvIdadePessoa"
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content"
+        android:text="Idade da pessoa"
+        android:textSize="25dp"
+        app:layout_constraintTop_toBottomOf="@+id/tvNomePessoa"
+        app:layout_constraintStart_toStartOf="parent"
+        app:layout_constraintEnd_toEndOf="parent"
+        android:layout_marginTop="25dp"
+        />
+
+    <TextView
+        android:id="@+id/tvEmailPessoa"
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content"
+        android:text="E-mail da pessoa"
+        android:textSize="25dp"
+        app:layout_constraintTop_toBottomOf="@+id/tvIdadePessoa"
+        app:layout_constraintStart_toStartOf="parent"
+        app:layout_constraintEnd_toEndOf="parent"
+        android:layout_marginTop="25dp"
+        />
+
+    <TextView
+        android:id="@+id/tvTelefonePessoa"
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content"
+        android:text="Telefone da pessoa"
+        android:textSize="25dp"
+        app:layout_constraintTop_toBottomOf="@+id/tvEmailPessoa"
+        app:layout_constraintStart_toStartOf="parent"
+        app:layout_constraintEnd_toEndOf="parent"
+        android:layout_marginTop="25dp"
+        />
+
+</androidx.constraintlayout.widget.ConstraintLayout>
