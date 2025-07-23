@@ -1,127 +1,130 @@
 <?xml version="1.0" encoding="utf-8"?>
-<androidx.constraintlayout.widget.ConstraintLayout
-    xmlns:android="http://schemas.android.com/apk/res/android"
+<androidx.constraintlayout.widget.ConstraintLayout xmlns:android="http://schemas.android.com/apk/res/android"
     xmlns:app="http://schemas.android.com/apk/res-auto"
     xmlns:tools="http://schemas.android.com/tools"
     android:layout_width="match_parent"
     android:layout_height="match_parent"
     android:background="@color/creme_quente"
-    tools:context=".RegisterActivity"> <include
-    android:id="@+id/header"
-    layout="@layout/layout_header"
-    android:layout_width="match_parent"
-    android:layout_height="wrap_content"
-    app:layout_constraintEnd_toEndOf="parent"
-    app:layout_constraintStart_toStartOf="parent"
-    app:layout_constraintTop_toTopOf="parent" />
+    tools:context=".RegisterActivity"
+    android:id="@+id/main"
+    >
+
+    <include
+        android:id="@+id/header"
+        layout="@layout/layout_header"
+        android:layout_width="match_parent"
+        android:layout_height="wrap_content"
+        app:layout_constraintEnd_toEndOf="parent"
+        app:layout_constraintStart_toStartOf="parent"
+        app:layout_constraintTop_toTopOf="parent" />
 
     <ScrollView
         android:layout_width="match_parent"
         android:layout_height="0dp"
-        app:layout_constraintTop_toBottomOf="@+id/header"
         app:layout_constraintBottom_toBottomOf="parent"
+        app:layout_constraintEnd_toEndOf="parent"
         app:layout_constraintStart_toStartOf="parent"
-        app:layout_constraintEnd_toEndOf="parent">
+        app:layout_constraintTop_toBottomOf="@+id/header">
 
         <LinearLayout
             android:id="@+id/register_content_layout"
             android:layout_width="match_parent"
             android:layout_height="wrap_content"
-            android:orientation="vertical"
             android:gravity="center_horizontal"
+            android:orientation="vertical"
             android:padding="32dp">
 
             <TextView
                 android:id="@+id/text_view_register_title"
                 android:layout_width="wrap_content"
                 android:layout_height="wrap_content"
+                android:layout_marginBottom="32dp"
                 android:text="Criar Conta"
-                android:textSize="24sp"
-                android:textStyle="bold"
                 android:textColor="@color/azul_acinzentado"
-                android:layout_marginBottom="32dp" />
+                android:textSize="24sp"
+                android:textStyle="bold" />
 
             <EditText
                 android:id="@+id/edit_text_full_name"
                 android:layout_width="match_parent"
                 android:layout_height="wrap_content"
+                android:layout_marginBottom="16dp"
+                android:background="@drawable/rounded_edittext_blue_gray_border"
                 android:hint="Nome Completo"
                 android:inputType="textPersonName"
                 android:padding="12dp"
-                android:layout_marginBottom="16dp"
-                android:background="@drawable/rounded_edittext_blue_gray_border"
-                android:textColorHint="@color/azul_acinzentado"
-                android:textColor="@color/azul_acinzentado"/>
+                android:textColor="@color/azul_acinzentado"
+                android:textColorHint="@color/azul_acinzentado" />
 
             <EditText
                 android:id="@+id/edit_text_register_email"
                 android:layout_width="match_parent"
                 android:layout_height="wrap_content"
+                android:layout_marginBottom="16dp"
+                android:background="@drawable/rounded_edittext_blue_gray_border"
                 android:hint="Email"
                 android:inputType="textEmailAddress"
                 android:padding="12dp"
-                android:layout_marginBottom="16dp"
-                android:background="@drawable/rounded_edittext_blue_gray_border"
-                android:textColorHint="@color/azul_acinzentado"
-                android:textColor="@color/azul_acinzentado"/>
+                android:textColor="@color/azul_acinzentado"
+                android:textColorHint="@color/azul_acinzentado" />
 
             <EditText
                 android:id="@+id/edit_text_phone"
                 android:layout_width="match_parent"
                 android:layout_height="wrap_content"
+                android:layout_marginBottom="16dp"
+                android:background="@drawable/rounded_edittext_blue_gray_border"
                 android:hint="Telefone (com DDD)"
                 android:inputType="phone"
                 android:padding="12dp"
-                android:layout_marginBottom="16dp"
-                android:background="@drawable/rounded_edittext_blue_gray_border"
-                android:textColorHint="@color/azul_acinzentado"
-                android:textColor="@color/azul_acinzentado"/>
+                android:textColor="@color/azul_acinzentado"
+                android:textColorHint="@color/azul_acinzentado" />
 
             <EditText
                 android:id="@+id/edit_text_register_password"
                 android:layout_width="match_parent"
                 android:layout_height="wrap_content"
+                android:layout_marginBottom="16dp"
+                android:background="@drawable/rounded_edittext_blue_gray_border"
                 android:hint="Senha"
                 android:inputType="textPassword"
                 android:padding="12dp"
-                android:layout_marginBottom="16dp"
-                android:background="@drawable/rounded_edittext_blue_gray_border"
-                android:textColorHint="@color/azul_acinzentado"
-                android:textColor="@color/azul_acinzentado"/>
+                android:textColor="@color/azul_acinzentado"
+                android:textColorHint="@color/azul_acinzentado" />
 
             <EditText
                 android:id="@+id/edit_text_confirm_password"
                 android:layout_width="match_parent"
                 android:layout_height="wrap_content"
+                android:layout_marginBottom="32dp"
+                android:background="@drawable/rounded_edittext_blue_gray_border"
                 android:hint="Confirmar Senha"
                 android:inputType="textPassword"
                 android:padding="12dp"
-                android:layout_marginBottom="32dp"
-                android:background="@drawable/rounded_edittext_blue_gray_border"
-                android:textColorHint="@color/azul_acinzentado"
-                android:textColor="@color/azul_acinzentado"/>
+                android:textColor="@color/azul_acinzentado"
+                android:textColorHint="@color/azul_acinzentado" />
 
             <Button
                 android:id="@+id/button_register"
                 android:layout_width="match_parent"
                 android:layout_height="wrap_content"
-                android:text="Cadastrar"
                 android:backgroundTint="@color/verde_menta_suave"
-                android:textColor="@color/azul_acinzentado"
                 android:paddingVertical="12dp"
-                android:textStyle="bold"
+                android:text="Cadastrar"
+                android:textColor="@color/azul_acinzentado"
                 android:textSize="18sp"
-                app:cornerRadius="8dp"/>
+                android:textStyle="bold"
+                app:cornerRadius="8dp" />
 
             <TextView
                 android:id="@+id/text_view_already_have_account"
                 android:layout_width="wrap_content"
                 android:layout_height="wrap_content"
-                android:text="Já tem uma conta? Entrar"
-                android:textColor="@color/azul_acinzentado"
                 android:layout_marginTop="24dp"
                 android:clickable="true"
-                android:focusable="true"/>
+                android:focusable="true"
+                android:text="Já tem uma conta? Entrar"
+                android:textColor="@color/azul_acinzentado" />
 
         </LinearLayout>
     </ScrollView>

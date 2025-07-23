@@ -1,6 +1,9 @@
 package com.app.lanchonete;
 
+import android.content.Intent;
+import android.content.SharedPreferences;
 import android.os.Bundle;
+import android.view.View;
 
 import androidx.activity.EdgeToEdge;
 import androidx.appcompat.app.AppCompatActivity;
@@ -19,10 +22,22 @@ import java.util.List;
 public class MainActivity extends AppCompatActivity {
 
     private RecyclerView listagemProdutoDestaque;
+    SharedPreferences preferences;
 
     @Override
     protected void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
+
+        preferences = getSharedPreferences("lanchonete.autenticacao", MODE_PRIVATE);
+        boolean estaLogado = preferences.getBoolean("estaLogado", false);
+
+        if (!estaLogado) {
+            Intent intent = new Intent(MainActivity.this, LoginActivity.class);
+            startActivity(intent);
+            finish();
+            return;
+        }
+
         setContentView(R.layout.activity_main);
 
         listagemProdutoDestaque = findViewById(R.id.recycler_view_featured_products);
@@ -35,5 +50,15 @@ public class MainActivity extends AppCompatActivity {
 
         ProdutoAdapter adapter = new ProdutoAdapter(produtos);
         listagemProdutoDestaque.setAdapter(adapter);
+    }
+
+    public void sair(View view) {
+        SharedPreferences.Editor editor = preferences.edit();
+        editor.putBoolean("estaLogado", false);
+        editor.apply();
+
+        Intent intent = new Intent(MainActivity.this, LoginActivity.class);
+        startActivity(intent);
+        finish();
     }
 }

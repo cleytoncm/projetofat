@@ -74,7 +74,9 @@
             android:textColor="@color/azul_acinzentado"
             android:layout_marginBottom="24dp"
             android:clickable="true"
-            android:focusable="true"/>
+            android:focusable="true"
+            android:onClick="irParaRecuperarSenha"
+            />
 
         <View
             android:layout_width="match_parent"
@@ -91,7 +93,9 @@
             android:textColor="@color/azul_acinzentado"
             android:paddingVertical="12dp"
             android:textSize="18sp"
-            app:cornerRadius="8dp"/>
+            app:cornerRadius="8dp"
+            android:onClick="irParaCriarConta"
+            />
 
     </LinearLayout>
 
