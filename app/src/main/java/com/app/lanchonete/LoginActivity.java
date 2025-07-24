@@ -3,12 +3,17 @@ package com.app.lanchonete;
 import android.content.Intent;
 import android.content.SharedPreferences;
 import android.os.Bundle;
+import android.text.TextUtils;
+import android.util.Patterns;
 import android.view.View;
 import android.widget.Button;
 import android.widget.EditText;
 import android.widget.Toast;
 
 import androidx.appcompat.app.AppCompatActivity;
+
+import com.app.lanchonete.data.remote.UsuarioApiClient;
+import com.app.lanchonete.model.Usuario;
 
 public class LoginActivity extends AppCompatActivity {
 
@@ -28,26 +33,79 @@ public class LoginActivity extends AppCompatActivity {
         btnEntrar.setOnClickListener(new View.OnClickListener() {
             @Override
             public void onClick(View v) {
-                String email = etEmail.getText().toString();
-                String senha = etSenha.getText().toString();
-                boolean withError = false;
+                tentarLogin();
+            }
+        });
+    }
 
+    private void tentarLogin() {
+        etEmail.setError(null);
+        etSenha.setError(null);
 
-                // validação
+        String email = etEmail.getText().toString().trim();
+        String senha = etSenha.getText().toString().trim();
 
+        boolean cancelar = false;
+        View focoView = null;
 
-                if (withError) {
-                    Toast.makeText(LoginActivity.this, "Preencha todos os campos", Toast.LENGTH_SHORT).show();
-                } else {
-                    SharedPreferences preferences = getSharedPreferences("lanchonete.autenticacao", MODE_PRIVATE);
-                    SharedPreferences.Editor editor = preferences.edit();
-                    editor.putBoolean("estaLogado", true);
-                    editor.apply();
+        if (TextUtils.isEmpty(senha)) {
+            etSenha.setError("Campo obrigatório");
+            focoView = etSenha;
+            cancelar = true;
+        } else if (senha.length() < 6) {
+            etSenha.setError("A senha deve ter pelo menos 6 caracteres.");
+            focoView = etSenha;
+            cancelar = true;
+        }
 
-                    Intent intent = new Intent(LoginActivity.this, MainActivity.class);
-                    startActivity(intent);
-                    finish();
-                }
+        if (TextUtils.isEmpty(email)) {
+            etEmail.setError("Campo obrigatório");
+            focoView = etEmail;
+            cancelar = true;
+        } else if (!Patterns.EMAIL_ADDRESS.matcher(email).matches()) {
+            etEmail.setError("E-mail inválido");
+            focoView = etEmail;
+            cancelar = true;
+        }
+
+        if (cancelar) {
+            focoView.requestFocus();
+        } else {
+            autenticarComApi(email, senha);
+        }
+    }
+
+    private void autenticarComApi(String email, String senha) {
+        Toast.makeText(LoginActivity.this, "Verificando credenciais...", Toast.LENGTH_SHORT).show();
+
+        UsuarioApiClient.getInstance(this).autenticarUsuario(email, senha, new UsuarioApiClient.LoginCallback() {
+            @Override
+            public void onSuccess(Usuario usuarioLogado) {
+                Toast.makeText(LoginActivity.this, "Login bem-sucedido! Bem-vindo(a), " + usuarioLogado.getNome() + "!", Toast.LENGTH_SHORT).show();
+
+                SharedPreferences preferences = getSharedPreferences("lanchonete.autenticacao", MODE_PRIVATE);
+                SharedPreferences.Editor editor = preferences.edit();
+                editor.putBoolean("estaLogado", true);
+                editor.putString("emailUsuario", usuarioLogado.getEmail());
+                editor.putString("nomeUsuario", usuarioLogado.getNome());
+                editor.apply();
+
+                Intent intent = new Intent(LoginActivity.this, MainActivity.class);
+                startActivity(intent);
+                finish();
+            }
+
+            @Override
+            public void onError(String errorMessage) {
+                Toast.makeText(LoginActivity.this, "Erro de comunicação: " + errorMessage, Toast.LENGTH_LONG).show();
+            }
+
+            @Override
+            public void onCredenciaisInvalidas() {
+                Toast.makeText(LoginActivity.this, "E-mail ou senha inválidos.", Toast.LENGTH_LONG).show();
+                etEmail.setError("Verifique suas credenciais");
+                etSenha.setError("Verifique suas credenciais");
+                etEmail.requestFocus();
             }
         });
     }

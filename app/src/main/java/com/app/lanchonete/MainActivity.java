@@ -52,6 +52,11 @@ public class MainActivity extends AppCompatActivity {
         listagemProdutoDestaque.setAdapter(adapter);
     }
 
+    public void irCatalogo(View view) {
+        Intent intent = new Intent(MainActivity.this, CatologActivity.class);
+        startActivity(intent);
+    }
+
     public void sair(View view) {
         SharedPreferences.Editor editor = preferences.edit();
         editor.putBoolean("estaLogado", false);

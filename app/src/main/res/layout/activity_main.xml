@@ -94,13 +94,16 @@
                     android:padding="8dp">
 
                     <TextView
+                        android:id="@+id/irCatalogo"
                         android:layout_width="wrap_content"
                         android:layout_height="60dp"
                         android:contentDescription="Categoria Lanches"
                         android:gravity="center"
                         android:text="🍔"
                         android:textColor="@color/terracota_suave"
-                        android:textSize="48sp" />
+                        android:textSize="48sp"
+                        android:onClick="irCatalogo"
+                        />
 
                     <TextView
                         android:layout_width="wrap_content"
