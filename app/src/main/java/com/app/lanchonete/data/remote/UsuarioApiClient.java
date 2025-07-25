@@ -60,6 +60,12 @@ public class UsuarioApiClient extends BaseApiClient {
                 new Response.ErrorListener() {
                     @Override
                     public void onErrorResponse(VolleyError error) {
+                        if (error != null && error.networkResponse != null && error.networkResponse.statusCode == 404) {
+                            Log.i("UsuarioApiClient", "Email não encontrado (404), considerado único.");
+                            callback.onSuccess(true);
+                            return;
+                        }
+
                         String errorMessage = "Erro ao verificar unicidade do e-mail.";
                         if (error != null && error.getMessage() != null) {
                             errorMessage += ": " + error.getMessage();

@@ -50,7 +50,7 @@ public class ProdutoAdapter extends RecyclerView.Adapter<ProdutoAdapter.ProdutoV
     public void onBindViewHolder(@NonNull ProdutoViewHolder holder, int position) {
         Produto produto = produtos.get(position);
 
-        holder.imagemProduto.setImageResource(produto.getImagemUrl());
+        holder.imagemProduto.setImageResource(R.drawable.product_image_placeholder);
         holder.nomeProduto.setText(produto.getNome());
         holder.descricaoProduto.setText(produto.getDescricao());
 

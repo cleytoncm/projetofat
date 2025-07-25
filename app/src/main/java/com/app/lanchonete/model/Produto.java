@@ -1,12 +1,14 @@
 package com.app.lanchonete.model;
 
 public class Produto {
+
+    private int id;
     private String nome;
     private String descricao;
     private double preco;
-    private int imagemUrl;
+    private String imagemUrl;
 
-    public Produto(String nome, String descricao, double preco, int imagemUrl) {
+    public Produto(int id, String nome, String descricao, double preco, String imagemUrl) {
         this.nome = nome;
         this.descricao = descricao;
         this.preco = preco;
@@ -25,7 +27,7 @@ public class Produto {
         return preco;
     }
 
-    public int getImagemUrl() {
+    public String getImagemUrl() {
         return imagemUrl;
     }
 }

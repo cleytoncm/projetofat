@@ -1,6 +1,7 @@
 package com.app.lanchonete;
 
 import android.os.Bundle;
+import android.widget.Toast;
 
 import androidx.activity.EdgeToEdge;
 import androidx.appcompat.app.AppCompatActivity;
@@ -11,9 +12,9 @@ import androidx.recyclerview.widget.LinearLayoutManager;
 import androidx.recyclerview.widget.RecyclerView;
 
 import com.app.lanchonete.adapter.ProdutoAdapter;
+import com.app.lanchonete.data.remote.ProdutoApiClient;
 import com.app.lanchonete.model.Produto;
 
-import java.util.ArrayList;
 import java.util.List;
 
 public class CatologActivity extends AppCompatActivity {
@@ -35,24 +36,21 @@ public class CatologActivity extends AppCompatActivity {
         listagemProdutoDestaque = findViewById(R.id.recycler_view_all_products);
         listagemProdutoDestaque.setLayoutManager(new LinearLayoutManager(this));
 
-        List<Produto> produtos = new ArrayList<>();
-        produtos.add(new Produto("Produto 1", "Descrição do Produto 1", 10.99, R.drawable.product_image_placeholder));
-        produtos.add(new Produto("Produto 2", "Descrição do Produto 2", 15.99, R.drawable.product_image_placeholder));
-        produtos.add(new Produto("Produto 3", "Descrição do Produto 3", 8.99, R.drawable.product_image_placeholder));
-        produtos.add(new Produto("Produto 1", "Descrição do Produto 1", 10.99, R.drawable.product_image_placeholder));
-        produtos.add(new Produto("Produto 2", "Descrição do Produto 2", 15.99, R.drawable.product_image_placeholder));
-        produtos.add(new Produto("Produto 3", "Descrição do Produto 3", 8.99, R.drawable.product_image_placeholder));
-        produtos.add(new Produto("Produto 1", "Descrição do Produto 1", 10.99, R.drawable.product_image_placeholder));
-        produtos.add(new Produto("Produto 2", "Descrição do Produto 2", 15.99, R.drawable.product_image_placeholder));
-        produtos.add(new Produto("Produto 3", "Descrição do Produto 3", 8.99, R.drawable.product_image_placeholder));
-        produtos.add(new Produto("Produto 1", "Descrição do Produto 1", 10.99, R.drawable.product_image_placeholder));
-        produtos.add(new Produto("Produto 2", "Descrição do Produto 2", 15.99, R.drawable.product_image_placeholder));
-        produtos.add(new Produto("Produto 3", "Descrição do Produto 3", 8.99, R.drawable.product_image_placeholder));
-        produtos.add(new Produto("Produto 1", "Descrição do Produto 1", 10.99, R.drawable.product_image_placeholder));
-        produtos.add(new Produto("Produto 2", "Descrição do Produto 2", 15.99, R.drawable.product_image_placeholder));
-        produtos.add(new Produto("Produto 3", "Descrição do Produto 3", 8.99, R.drawable.product_image_placeholder));
+        obterProdutos();
+    }
 
-        ProdutoAdapter adapter = new ProdutoAdapter(produtos);
-        listagemProdutoDestaque.setAdapter(adapter);
+    private void obterProdutos() {
+        ProdutoApiClient.getInstance(this).obterProdutos(new ProdutoApiClient.ProdutoCallback() {
+            @Override
+            public void onSuccess(List<Produto> produtos) {
+                ProdutoAdapter adapter = new ProdutoAdapter(produtos);
+                listagemProdutoDestaque.setAdapter(adapter);
+            }
+
+            @Override
+            public void onError(String errorMessage) {
+                Toast.makeText(CatologActivity.this, "Erro ao listar produtos: " + errorMessage, Toast.LENGTH_LONG).show();
+            }
+        });
     }
 }
