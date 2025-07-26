@@ -11,6 +11,7 @@ import androidx.recyclerview.widget.RecyclerView;
 
 import com.app.lanchonete.R;
 import com.app.lanchonete.model.Produto;
+import com.bumptech.glide.Glide;
 
 import java.text.NumberFormat;
 import java.util.List;
@@ -50,7 +51,11 @@ public class ProdutoAdapter extends RecyclerView.Adapter<ProdutoAdapter.ProdutoV
     public void onBindViewHolder(@NonNull ProdutoViewHolder holder, int position) {
         Produto produto = produtos.get(position);
 
-        holder.imagemProduto.setImageResource(R.drawable.product_image_placeholder);
+        Glide.with(holder.itemView.getContext())
+                .load(produto.getImagemUrl())
+                .placeholder(R.drawable.product_image_placeholder)
+                .into(holder.imagemProduto);
+
         holder.nomeProduto.setText(produto.getNome());
         holder.descricaoProduto.setText(produto.getDescricao());
 

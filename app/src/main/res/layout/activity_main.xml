@@ -8,25 +8,14 @@
     android:background="@color/creme_quente"
     tools:context=".MainActivity">
 
-    <include
+    <androidx.fragment.app.FragmentContainerView
         android:id="@+id/header"
-        layout="@layout/layout_header"
+        android:name="com.app.lanchonete.HeaderFragment"
         android:layout_width="match_parent"
         android:layout_height="wrap_content"
-        app:layout_constraintEnd_toEndOf="parent"
-        app:layout_constraintStart_toStartOf="parent"
-        app:layout_constraintTop_toTopOf="parent" />
-
-    <TextView
-        android:id="@+id/btnSair"
-        android:layout_width="wrap_content"
-        android:layout_height="wrap_content"
-        android:text="Sair"
         app:layout_constraintTop_toTopOf="parent"
+        app:layout_constraintStart_toStartOf="parent"
         app:layout_constraintEnd_toEndOf="parent"
-        android:textColor="@color/azul_acinzentado"
-        android:onClick="sair"
-        android:padding="10dp"
         />
 
     <ScrollView

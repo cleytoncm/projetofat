@@ -69,13 +69,4 @@ public class MainActivity extends AppCompatActivity {
         startActivity(intent);
     }
 
-    public void sair(View view) {
-        SharedPreferences.Editor editor = preferences.edit();
-        editor.putBoolean("estaLogado", false);
-        editor.apply();
-
-        Intent intent = new Intent(MainActivity.this, LoginActivity.class);
-        startActivity(intent);
-        finish();
-    }
 }
