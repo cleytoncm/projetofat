@@ -1,0 +1,79 @@
+<?xml version="1.0" encoding="utf-8"?>
+<androidx.constraintlayout.widget.ConstraintLayout xmlns:android="http://schemas.android.com/apk/res/android"
+    android:layout_width="match_parent"
+    android:layout_height="wrap_content"
+    xmlns:app="http://schemas.android.com/apk/res-auto"
+    android:background="@color/white"
+    >
+
+    <LinearLayout
+        android:id="@+id/layout_footer"
+        android:layout_width="match_parent"
+        android:layout_height="wrap_content"
+        app:layout_constraintTop_toTopOf="parent"
+        app:layout_constraintBottom_toBottomOf="parent"
+        android:orientation="horizontal"
+        android:gravity="center_horizontal"
+        android:weightSum="5"
+        >
+
+        <ImageButton
+            android:id="@+id/button_home"
+            android:layout_width="48dp"
+            android:layout_height="48dp"
+            android:background="?attr/selectableItemBackgroundBorderless"
+            android:contentDescription="Home"
+            android:padding="12dp"
+            android:src="@drawable/ic_home"
+            app:tint="@color/azul_acinzentado"
+            android:layout_weight="1"/>
+
+        <ImageButton
+            android:id="@+id/button_catalog"
+            android:layout_width="48dp"
+            android:layout_height="48dp"
+            android:background="?attr/selectableItemBackgroundBorderless"
+            android:contentDescription="Produtos"
+            android:padding="12dp"
+            android:src="@drawable/ic_catalog"
+            app:tint="@color/azul_acinzentado"
+            android:layout_weight="1" />
+
+        <ImageButton
+            android:id="@+id/button_profile"
+            android:layout_width="48dp"
+            android:layout_height="48dp"
+            android:background="?attr/selectableItemBackgroundBorderless"
+            android:contentDescription="Meu perfil"
+            android:padding="12dp"
+            android:src="@drawable/ic_profile"
+            app:tint="@color/azul_acinzentado"
+            android:layout_weight="1" />
+
+        <ImageButton
+            android:id="@+id/button_shopping"
+            android:layout_width="48dp"
+            android:layout_height="48dp"
+            android:background="?attr/selectableItemBackgroundBorderless"
+            android:contentDescription="Meu carrinho"
+            android:padding="12dp"
+            android:src="@drawable/ic_cart"
+            app:tint="@color/azul_acinzentado"
+            android:layout_weight="1" />
+
+        <ImageButton
+            android:id="@+id/button_logout_header"
+            android:layout_width="48dp"
+            android:layout_height="48dp"
+            android:background="?attr/selectableItemBackgroundBorderless"
+            android:contentDescription="Sair da conta"
+            android:padding="12dp"
+            android:src="@drawable/ic_logout"
+            app:tint="@color/azul_acinzentado"
+            android:layout_weight="1" />
+
+
+
+    </LinearLayout>
+
+</androidx.constraintlayout.widget.ConstraintLayout>

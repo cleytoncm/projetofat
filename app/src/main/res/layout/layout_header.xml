@@ -7,34 +7,30 @@
     android:paddingHorizontal="16dp"
     android:paddingVertical="8dp">
 
+    <ImageButton
+        android:id="@+id/button_hamburguer_menu"
+        android:layout_width="48dp"
+        android:layout_height="48dp"
+        android:background="?attr/selectableItemBackgroundBorderless"
+        android:contentDescription="Menu"
+        android:padding="12dp"
+        android:src="@drawable/ic_menu_hamburguer"
+        app:layout_constraintBottom_toBottomOf="parent"
+        app:layout_constraintStart_toStartOf="parent"
+        app:layout_constraintTop_toTopOf="parent"
+        app:tint="@color/azul_acinzentado" />
+
     <ImageView
         android:id="@+id/image_view_logo_header"
-        android:layout_width="wrap_content"
+        android:layout_width="250dp"
         android:layout_height="50dp"
         android:clickable="true"
         android:contentDescription="@string/logo_sabor_e_cia"
         android:focusable="true"
         android:src="@drawable/logo"
         app:layout_constraintBottom_toBottomOf="parent"
+        app:layout_constraintEnd_toEndOf="parent"
         app:layout_constraintStart_toStartOf="parent"
-        app:layout_constraintTop_toTopOf="parent" />
-
-    <TextView
-        android:id="@+id/text_view_logged_in_user"
-        android:layout_width="0dp"
-        android:layout_height="wrap_content"
-        android:layout_marginStart="16dp"
-        android:layout_marginEnd="8dp"
-        android:ellipsize="end"
-        android:gravity="end"
-        android:maxLines="1"
-        android:text="Olá, [Nome do Usuário]!"
-        android:textColor="@color/azul_acinzentado"
-        android:textSize="16sp"
-        android:textStyle="bold"
-        app:layout_constraintBottom_toBottomOf="parent"
-        app:layout_constraintEnd_toStartOf="@id/button_logout_header"
-        app:layout_constraintStart_toEndOf="@id/image_view_logo_header"
         app:layout_constraintTop_toTopOf="parent" />
 
     <ImageButton
@@ -49,4 +45,19 @@
         app:layout_constraintEnd_toEndOf="parent"
         app:layout_constraintTop_toTopOf="parent"
         app:tint="@color/azul_acinzentado" />
+
+    <TextView
+        android:id="@+id/text_view_logged_in_user"
+        android:layout_width="0dp"
+        android:layout_height="wrap_content"
+        android:ellipsize="end"
+        android:gravity="end"
+        android:maxLines="1"
+        android:text="Olá, [Nome do Usuário]!"
+        android:textColor="@color/azul_acinzentado"
+        android:textSize="16sp"
+        android:textStyle="bold"
+        app:layout_constraintStart_toStartOf="parent"
+        app:layout_constraintTop_toBottomOf="@id/image_view_logo_header" />
+
 </androidx.constraintlayout.widget.ConstraintLayout>

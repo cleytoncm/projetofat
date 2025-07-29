@@ -1,0 +1,18 @@
+<?xml version="1.0" encoding="utf-8"?>
+<menu xmlns:android="http://schemas.android.com/apk/res/android">
+    <item
+        android:id="@+id/item_home"
+        android:title="@string/menu_home" />
+    <item
+        android:id="@+id/item_catalog"
+        android:title="@string/menu_catalogo" />
+    <item
+        android:id="@+id/item_cart"
+        android:title="@string/menu_carrinho" />
+    <item
+        android:id="@+id/item_orders"
+        android:title="@string/menu_pedidos" />
+    <item
+        android:id="@+id/item_profile"
+        android:title="@string/menu_perfil" />
+</menu>

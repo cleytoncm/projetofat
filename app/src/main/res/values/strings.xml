@@ -1,4 +1,9 @@
 <resources>
     <string name="app_name">Lanchonete</string>
     <string name="logo_sabor_e_cia">Logo Sabor e Cia</string>
+    <string name="menu_home">🏠Home</string>
+    <string name="menu_perfil">👤 Meu perfil</string>
+    <string name="menu_catalogo">🛍️ Produtos</string>
+    <string name="menu_carrinho">🛒 Meu carrinho</string>
+    <string name="menu_pedidos">🧾 Meus pedidos</string>
 </resources>
