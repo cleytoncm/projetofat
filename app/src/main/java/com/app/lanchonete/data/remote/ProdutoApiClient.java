@@ -55,7 +55,9 @@ public class ProdutoApiClient extends BaseApiClient {
                                 double preco = produtoJson.getDouble("preco");
                                 String descricao = produtoJson.getString("descricao");
                                 String imagemUrl = produtoJson.getString("imagemUrl");
-                                Produto produto = new Produto(id, nome, descricao, preco, imagemUrl);
+                                String categoria = produtoJson.getString("categoria");
+
+                                Produto produto = new Produto(id, nome, descricao, preco, imagemUrl, categoria);
 
                                 produtos.add(produto);
                             } catch (JSONException e) {

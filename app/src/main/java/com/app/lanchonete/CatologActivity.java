@@ -3,7 +3,11 @@ package com.app.lanchonete;
 import android.os.Bundle;
 import android.text.Editable;
 import android.text.TextWatcher;
+import android.util.Log;
+import android.view.View;
+import android.widget.Button;
 import android.widget.EditText;
+import android.widget.LinearLayout;
 import android.widget.Toast;
 
 import androidx.activity.EdgeToEdge;
@@ -20,7 +24,6 @@ import com.app.lanchonete.model.Produto;
 
 import java.util.List;
 import java.util.stream.Collectors;
-import java.util.stream.Stream;
 
 public class CatologActivity extends AppCompatActivity {
 
@@ -28,17 +31,14 @@ public class CatologActivity extends AppCompatActivity {
     private List<Produto> produtosList;
     private EditText editTextBusca;
     ProdutoAdapter produtoAdapter;
+    private LinearLayout linearButtonLanches;
+    private LinearLayout linearButtonPorcoes;
+    private LinearLayout linearButtonBebidas;
 
     @Override
     protected void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
-        EdgeToEdge.enable(this);
         setContentView(R.layout.activity_catolog);
-        ViewCompat.setOnApplyWindowInsetsListener(findViewById(R.id.main), (v, insets) -> {
-            Insets systemBars = insets.getInsets(WindowInsetsCompat.Type.systemBars());
-            v.setPadding(systemBars.left, systemBars.top, systemBars.right, systemBars.bottom);
-            return insets;
-        });
 
         editTextBusca = findViewById(R.id.edit_text_search);
         listagemProdutoDestaque = findViewById(R.id.recycler_view_all_products);
@@ -69,7 +69,7 @@ public class CatologActivity extends AppCompatActivity {
                 }
 
                 if (palavraBusca.length() >= 3) {
-                    List<Produto> produtosFiltrados = filtrarProdutos(palavraBusca);
+                    List<Produto> produtosFiltrados = filtrarProdutosNome(palavraBusca);
                     produtoAdapter = new ProdutoAdapter(produtosFiltrados);
                     listagemProdutoDestaque.setAdapter(produtoAdapter);
                 }
@@ -77,6 +77,32 @@ public class CatologActivity extends AppCompatActivity {
             }
         });
 
+        linearButtonLanches = findViewById(R.id.category_lanches);
+        linearButtonLanches.setOnClickListener(v -> {
+            List<Produto> produtosFiltrados = filtrarProdutosCategoria("L");
+            produtoAdapter = new ProdutoAdapter(produtosFiltrados);
+            listagemProdutoDestaque.setAdapter(produtoAdapter);
+        });
+
+        linearButtonPorcoes = findViewById(R.id.category_porcoes);
+        linearButtonPorcoes.setOnClickListener(new View.OnClickListener() {
+            @Override
+            public void onClick(View v) {
+                List<Produto> produtosFiltrados = filtrarProdutosCategoria("P");
+                produtoAdapter = new ProdutoAdapter(produtosFiltrados);
+                listagemProdutoDestaque.setAdapter(produtoAdapter);
+            }
+        });
+
+        linearButtonBebidas = findViewById(R.id.category_bebidas);
+        linearButtonBebidas.setOnClickListener(new View.OnClickListener() {
+            @Override
+            public void onClick(View v) {
+                List<Produto> produtosFiltrados = filtrarProdutosCategoria("B");
+                produtoAdapter = new ProdutoAdapter(produtosFiltrados);
+                listagemProdutoDestaque.setAdapter(produtoAdapter);
+            }
+        });
     }
 
     private void obterProdutos() {
@@ -95,11 +121,18 @@ public class CatologActivity extends AppCompatActivity {
         });
     }
 
-    private List<Produto> filtrarProdutos(String palavraBusca) {
+    private List<Produto> filtrarProdutosNome(String palavraBusca) {
         String termoBusca = palavraBusca.toLowerCase();
         return  produtosList.stream()
                 .filter(produto -> produto.getNome().toLowerCase().contains(termoBusca))
                 .collect(Collectors.toList());
 
     }
+
+    private List<Produto> filtrarProdutosCategoria(String categoria) {
+        return produtosList.stream()
+                .filter(produto -> produto.getCategoria().equals(categoria))
+                .collect(Collectors.toList());
+    }
+
 }
