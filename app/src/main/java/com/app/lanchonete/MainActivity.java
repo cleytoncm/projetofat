@@ -3,29 +3,28 @@ package com.app.lanchonete;
 import android.content.Intent;
 import android.content.SharedPreferences;
 import android.os.Bundle;
-import android.util.Log;
 import android.view.View;
+import android.widget.LinearLayout;
 import android.widget.Toast;
 
-import androidx.activity.EdgeToEdge;
 import androidx.appcompat.app.AppCompatActivity;
-import androidx.core.graphics.Insets;
-import androidx.core.view.ViewCompat;
-import androidx.core.view.WindowInsetsCompat;
 import androidx.recyclerview.widget.LinearLayoutManager;
 import androidx.recyclerview.widget.RecyclerView;
 
 import com.app.lanchonete.adapter.ProdutoAdapter;
 import com.app.lanchonete.data.remote.ProdutoApiClient;
 import com.app.lanchonete.model.Produto;
+import com.app.lanchonete.utils.Constants;
 
-import java.util.ArrayList;
 import java.util.List;
 
 public class MainActivity extends AppCompatActivity {
 
     private RecyclerView listagemProdutoDestaque;
     SharedPreferences preferences;
+    LinearLayout linearButtonLanches;
+    LinearLayout linearButtonPorcoes;
+    LinearLayout linearButtonBebidas;
 
     @Override
     protected void onCreate(Bundle savedInstanceState) {
@@ -47,6 +46,31 @@ public class MainActivity extends AppCompatActivity {
         listagemProdutoDestaque.setLayoutManager(new LinearLayoutManager(this));
 
         obterProdutosDestaques();
+
+        linearButtonLanches = findViewById(R.id.category_lanches);
+        linearButtonLanches.setOnClickListener(new View.OnClickListener() {
+            @Override
+            public void onClick(View v) {
+                irCatalogo(v, "L");
+            }
+        });
+
+        linearButtonPorcoes = findViewById(R.id.category_porcoes);
+        linearButtonPorcoes.setOnClickListener(new View.OnClickListener() {
+            @Override
+            public void onClick(View v) {
+                irCatalogo(v, "P");
+            }
+        });
+
+        linearButtonBebidas = findViewById(R.id.category_bebidas);
+        linearButtonBebidas.setOnClickListener(new View.OnClickListener() {
+            @Override
+            public void onClick(View v) {
+                irCatalogo(v, "B");
+            }
+        });
+
     }
 
     private void obterProdutosDestaques() {
@@ -64,8 +88,9 @@ public class MainActivity extends AppCompatActivity {
         });
     }
 
-    public void irCatalogo(View view) {
+    public void irCatalogo(View view, String categoria) {
         Intent intent = new Intent(MainActivity.this, CatologActivity.class);
+        intent.putExtra(Constants.INTENT_CATEGORIA, categoria);
         startActivity(intent);
     }
 

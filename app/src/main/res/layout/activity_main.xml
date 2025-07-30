@@ -91,7 +91,6 @@
                         android:text="🍔"
                         android:textColor="@color/terracota_suave"
                         android:textSize="48sp"
-                        android:onClick="irCatalogo"
                         />
 
                     <TextView

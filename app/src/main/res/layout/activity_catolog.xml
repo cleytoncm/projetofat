@@ -129,6 +129,38 @@
                 android:textSize="14sp" />
         </LinearLayout>
 
+        <LinearLayout
+            android:id="@+id/category_all"
+            android:layout_width="0dp"
+            android:layout_height="wrap_content"
+            android:layout_weight="1"
+            android:background="?android:attr/selectableItemBackground"
+            android:clickable="true"
+            android:focusable="true"
+            android:gravity="center_horizontal"
+            android:orientation="vertical"
+            android:padding="8dp">
+
+            <TextView
+                android:layout_width="wrap_content"
+                android:layout_height="60dp"
+                android:contentDescription="Categoria Bebidas"
+                android:gravity="center"
+                android:text="🛍️"
+                android:textColor="@color/terracota_suave"
+                android:textSize="48sp" />
+
+            <TextView
+                android:layout_width="wrap_content"
+                android:layout_height="wrap_content"
+                android:layout_marginTop="4dp"
+                android:ellipsize="end"
+                android:maxLines="1"
+                android:text="Todos"
+                android:textColor="@color/azul_acinzentado"
+                android:textSize="14sp" />
+        </LinearLayout>
+
     </LinearLayout>
 
     <ScrollView
@@ -158,6 +190,7 @@
                 android:textColorHint="@color/azul_acinzentado" />
 
             <TextView
+                android:id="@+id/text_view_title_list_products"
                 android:layout_width="wrap_content"
                 android:layout_height="wrap_content"
                 android:layout_marginBottom="16dp"

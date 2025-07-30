@@ -1,26 +1,23 @@
 package com.app.lanchonete;
 
+import android.content.Intent;
 import android.os.Bundle;
 import android.text.Editable;
 import android.text.TextWatcher;
-import android.util.Log;
 import android.view.View;
-import android.widget.Button;
 import android.widget.EditText;
 import android.widget.LinearLayout;
+import android.widget.TextView;
 import android.widget.Toast;
 
-import androidx.activity.EdgeToEdge;
 import androidx.appcompat.app.AppCompatActivity;
-import androidx.core.graphics.Insets;
-import androidx.core.view.ViewCompat;
-import androidx.core.view.WindowInsetsCompat;
 import androidx.recyclerview.widget.LinearLayoutManager;
 import androidx.recyclerview.widget.RecyclerView;
 
 import com.app.lanchonete.adapter.ProdutoAdapter;
 import com.app.lanchonete.data.remote.ProdutoApiClient;
 import com.app.lanchonete.model.Produto;
+import com.app.lanchonete.utils.Constants;
 
 import java.util.List;
 import java.util.stream.Collectors;
@@ -34,6 +31,8 @@ public class CatologActivity extends AppCompatActivity {
     private LinearLayout linearButtonLanches;
     private LinearLayout linearButtonPorcoes;
     private LinearLayout linearButtonBebidas;
+    private LinearLayout linearButtonTodos;
+    private TextView textViewTitleListProducts;
 
     @Override
     protected void onCreate(Bundle savedInstanceState) {
@@ -43,6 +42,7 @@ public class CatologActivity extends AppCompatActivity {
         editTextBusca = findViewById(R.id.edit_text_search);
         listagemProdutoDestaque = findViewById(R.id.recycler_view_all_products);
         listagemProdutoDestaque.setLayoutManager(new LinearLayoutManager(this));
+        textViewTitleListProducts = findViewById(R.id.text_view_title_list_products);
 
         obterProdutos();
 
@@ -82,6 +82,7 @@ public class CatologActivity extends AppCompatActivity {
             List<Produto> produtosFiltrados = filtrarProdutosCategoria("L");
             produtoAdapter = new ProdutoAdapter(produtosFiltrados);
             listagemProdutoDestaque.setAdapter(produtoAdapter);
+            textViewTitleListProducts.setText("Lanches");
         });
 
         linearButtonPorcoes = findViewById(R.id.category_porcoes);
@@ -91,6 +92,7 @@ public class CatologActivity extends AppCompatActivity {
                 List<Produto> produtosFiltrados = filtrarProdutosCategoria("P");
                 produtoAdapter = new ProdutoAdapter(produtosFiltrados);
                 listagemProdutoDestaque.setAdapter(produtoAdapter);
+                textViewTitleListProducts.setText("Porções");
             }
         });
 
@@ -101,6 +103,17 @@ public class CatologActivity extends AppCompatActivity {
                 List<Produto> produtosFiltrados = filtrarProdutosCategoria("B");
                 produtoAdapter = new ProdutoAdapter(produtosFiltrados);
                 listagemProdutoDestaque.setAdapter(produtoAdapter);
+                textViewTitleListProducts.setText("Bebidas");
+            }
+        });
+
+        linearButtonTodos = findViewById(R.id.category_all);
+        linearButtonTodos.setOnClickListener(new View.OnClickListener() {
+            @Override
+            public void onClick(View v) {
+                produtoAdapter = new ProdutoAdapter(produtosList);
+                listagemProdutoDestaque.setAdapter(produtoAdapter);
+                textViewTitleListProducts.setText("Todos os Produtos");
             }
         });
     }
@@ -110,7 +123,29 @@ public class CatologActivity extends AppCompatActivity {
             @Override
             public void onSuccess(List<Produto> produtos) {
                 produtosList = produtos;
-                produtoAdapter = new ProdutoAdapter(produtosList);
+                List<Produto> produtosFiltrados = null;
+
+                Intent intent = getIntent();
+                if (intent != null) {
+                    String categoria = intent.getStringExtra(Constants.INTENT_CATEGORIA);
+                    if (categoria != null) {
+                        if (categoria.equals("L")) {
+                            textViewTitleListProducts.setText("Lanches");
+                        } else if (categoria.equals("P")) {
+                            textViewTitleListProducts.setText("Porções");
+                        } else if (categoria.equals("B")) {
+                            textViewTitleListProducts.setText("Bebidas");
+                        }
+                        produtosFiltrados = filtrarProdutosCategoria(categoria);
+                    }
+                }
+
+                if (produtosFiltrados != null) {
+                    produtoAdapter = new ProdutoAdapter(produtosFiltrados);
+                } else {
+                    produtoAdapter = new ProdutoAdapter(produtos);
+                }
+
                 listagemProdutoDestaque.setAdapter(produtoAdapter);
             }
 
