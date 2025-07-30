@@ -77,7 +77,7 @@ public class MainActivity extends AppCompatActivity {
         ProdutoApiClient.getInstance(this).obterProdutos(new ProdutoApiClient.ProdutoCallback() {
             @Override
             public void onSuccess(List<Produto> produtos) {
-                ProdutoAdapter adapter = new ProdutoAdapter(produtos);
+                ProdutoAdapter adapter = new ProdutoAdapter(produtos, MainActivity.this);
                 listagemProdutoDestaque.setAdapter(adapter);
             }
 

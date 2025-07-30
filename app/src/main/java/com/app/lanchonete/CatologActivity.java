@@ -63,14 +63,14 @@ public class CatologActivity extends AppCompatActivity {
                 String palavraBusca = s.toString();
 
                 if (palavraBusca.isBlank()) {
-                    produtoAdapter = new ProdutoAdapter(produtosList);
+                    produtoAdapter = new ProdutoAdapter(produtosList, CatologActivity.this);
                     listagemProdutoDestaque.setAdapter(produtoAdapter);
                     return;
                 }
 
                 if (palavraBusca.length() >= 3) {
                     List<Produto> produtosFiltrados = filtrarProdutosNome(palavraBusca);
-                    produtoAdapter = new ProdutoAdapter(produtosFiltrados);
+                    produtoAdapter = new ProdutoAdapter(produtosFiltrados, CatologActivity.this);
                     listagemProdutoDestaque.setAdapter(produtoAdapter);
                 }
 
@@ -80,7 +80,7 @@ public class CatologActivity extends AppCompatActivity {
         linearButtonLanches = findViewById(R.id.category_lanches);
         linearButtonLanches.setOnClickListener(v -> {
             List<Produto> produtosFiltrados = filtrarProdutosCategoria("L");
-            produtoAdapter = new ProdutoAdapter(produtosFiltrados);
+            produtoAdapter = new ProdutoAdapter(produtosFiltrados, CatologActivity.this);
             listagemProdutoDestaque.setAdapter(produtoAdapter);
             textViewTitleListProducts.setText("Lanches");
         });
@@ -90,7 +90,7 @@ public class CatologActivity extends AppCompatActivity {
             @Override
             public void onClick(View v) {
                 List<Produto> produtosFiltrados = filtrarProdutosCategoria("P");
-                produtoAdapter = new ProdutoAdapter(produtosFiltrados);
+                produtoAdapter = new ProdutoAdapter(produtosFiltrados, CatologActivity.this);
                 listagemProdutoDestaque.setAdapter(produtoAdapter);
                 textViewTitleListProducts.setText("Porções");
             }
@@ -101,7 +101,7 @@ public class CatologActivity extends AppCompatActivity {
             @Override
             public void onClick(View v) {
                 List<Produto> produtosFiltrados = filtrarProdutosCategoria("B");
-                produtoAdapter = new ProdutoAdapter(produtosFiltrados);
+                produtoAdapter = new ProdutoAdapter(produtosFiltrados, CatologActivity.this);
                 listagemProdutoDestaque.setAdapter(produtoAdapter);
                 textViewTitleListProducts.setText("Bebidas");
             }
@@ -111,7 +111,7 @@ public class CatologActivity extends AppCompatActivity {
         linearButtonTodos.setOnClickListener(new View.OnClickListener() {
             @Override
             public void onClick(View v) {
-                produtoAdapter = new ProdutoAdapter(produtosList);
+                produtoAdapter = new ProdutoAdapter(produtosList, CatologActivity.this);
                 listagemProdutoDestaque.setAdapter(produtoAdapter);
                 textViewTitleListProducts.setText("Todos os Produtos");
             }
@@ -141,9 +141,9 @@ public class CatologActivity extends AppCompatActivity {
                 }
 
                 if (produtosFiltrados != null) {
-                    produtoAdapter = new ProdutoAdapter(produtosFiltrados);
+                    produtoAdapter = new ProdutoAdapter(produtosFiltrados, CatologActivity.this);
                 } else {
-                    produtoAdapter = new ProdutoAdapter(produtos);
+                    produtoAdapter = new ProdutoAdapter(produtos, CatologActivity.this);
                 }
 
                 listagemProdutoDestaque.setAdapter(produtoAdapter);

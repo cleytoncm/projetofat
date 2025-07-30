@@ -37,4 +37,8 @@ public class Produto {
     public String getCategoria() {
         return categoria;
     }
+
+    public int getId() {
+        return id;
+    }
 }
