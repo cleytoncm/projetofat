@@ -7,6 +7,7 @@ import com.android.volley.Request;
 import com.android.volley.Response;
 import com.android.volley.VolleyError;
 import com.android.volley.toolbox.JsonArrayRequest;
+import com.android.volley.toolbox.JsonObjectRequest;
 import com.app.lanchonete.model.Produto;
 import com.app.lanchonete.utils.Constants;
 
@@ -93,29 +94,28 @@ public class ProdutoApiClient extends BaseApiClient {
     public void obterProdutoPorId(int id, final ProdutoPorIdCallback callback) {
         String url = Constants.BASE_URL + "produtos/" + id;
 
-        JsonArrayRequest jsonArrayRequest = new JsonArrayRequest(
+        JsonObjectRequest jsonObjectRequest = new JsonObjectRequest(
                 Request.Method.GET, url, null,
-                new Response.Listener<JSONArray>() {
+                new Response.Listener<JSONObject>() {
                     @Override
-                    public void onResponse(JSONArray response) {
-                        if (response != null && response.length() > 0) {
+                    public void onResponse(JSONObject response) {
+                        if (response != null) {
                             try {
-                                JSONObject produtoJson = response.getJSONObject(0);
-                                int id = produtoJson.getInt("id");
-                                String nome = produtoJson.getString("nome");
-                                double preco = produtoJson.getDouble("preco");
-                                String descricao = produtoJson.getString("descricao");
-                                String imagemUrl = produtoJson.getString("imagemUrl");
-                                String categoria = produtoJson.getString("categoria");
+                                int produtoId = response.getInt("id");
+                                String nome = response.getString("nome");
+                                double preco = response.getDouble("preco");
+                                String descricao = response.getString("descricao");
+                                String imagemUrl = response.getString("imagemUrl");
+                                String categoria = response.getString("categoria");
 
-                                Produto produto = new Produto(id, nome, descricao, preco, imagemUrl, categoria);
-
+                                Produto produto = new Produto(produtoId, nome, descricao, preco, imagemUrl, categoria);
                                 callback.onSuccess(produto);
+
                             } catch (JSONException e) {
-                                callback.onError(e.getMessage());
+                                callback.onError("Erro de parseamento do JSON: " + e.getMessage());
                             }
                         } else {
-                            callback.onError("Produto não encontrado.");
+                            callback.onError("Produto não encontrado ou resposta vazia.");
                         }
                     }
                 },
@@ -131,6 +131,6 @@ public class ProdutoApiClient extends BaseApiClient {
                 }
         );
 
-        addToRequestQueue(jsonArrayRequest);
+        addToRequestQueue(jsonObjectRequest);
     }
 }

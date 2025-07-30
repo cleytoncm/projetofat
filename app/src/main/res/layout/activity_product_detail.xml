@@ -49,6 +49,14 @@
                 android:textColor="@color/azul_acinzentado"
                 android:textSize="28sp"
                 android:textStyle="bold" />
+            <TextView
+                android:id="@+id/text_view_detail_category"
+                android:layout_width="wrap_content"
+                android:layout_height="wrap_content"
+                android:text="Categoria"
+                android:textColor="@color/azul_acinzentado"
+                android:textSize="12sp"
+                android:textStyle="bold" />
 
             <TextView
                 android:id="@+id/text_view_detail_description"
