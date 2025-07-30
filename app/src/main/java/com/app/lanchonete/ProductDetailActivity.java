@@ -3,6 +3,7 @@ package com.app.lanchonete;
 import android.content.Intent;
 import android.os.Bundle;
 import android.util.Log;
+import android.widget.Button;
 import android.widget.ImageView;
 import android.widget.TextView;
 import android.widget.Toast;
@@ -21,6 +22,10 @@ public class ProductDetailActivity extends AppCompatActivity {
     private TextView textViewDetailPrice;
     private TextView textViewDetailCategory;
     private ImageView imageViewDetailProduct;
+    private Button buttonIncreaseQuantity;
+    private Button buttonDecreaseQuantity;
+    private TextView textViewQuantity;
+    private int quantity = 1;
 
 
     @Override
@@ -33,6 +38,9 @@ public class ProductDetailActivity extends AppCompatActivity {
         textViewDetailPrice = findViewById(R.id.text_view_detail_price);
         textViewDetailCategory = findViewById(R.id.text_view_detail_category);
         imageViewDetailProduct = findViewById(R.id.image_view_detail_product);
+        buttonIncreaseQuantity = findViewById(R.id.button_increase_quantity);
+        buttonDecreaseQuantity = findViewById(R.id.button_decrease_quantity);
+        textViewQuantity = findViewById(R.id.text_view_quantity);
 
         Intent intent = getIntent();
 
@@ -41,6 +49,25 @@ public class ProductDetailActivity extends AppCompatActivity {
             obterDetalhesProduto(produtoId);
         }
 
+        initListener();
+    }
+
+    private void initListener() {
+        buttonIncreaseQuantity.setOnClickListener(v -> {
+            if (quantity < 10) {
+                quantity++;
+                textViewQuantity.setText(String.valueOf(quantity));
+            } else {
+                Toast.makeText(this, "Quantidade máxima atingida", Toast.LENGTH_SHORT).show();
+            }
+        });
+
+        buttonDecreaseQuantity.setOnClickListener(v -> {
+            if (quantity > 1) {
+                quantity--;
+                textViewQuantity.setText(String.valueOf(quantity));
+            }
+        });
     }
 
     public void obterDetalhesProduto(int produtoId) {
