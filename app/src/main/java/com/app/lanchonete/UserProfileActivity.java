@@ -47,6 +47,8 @@ public class UserProfileActivity extends AppCompatActivity {
 
         obterUsuarioPorId(idUsuario);
 
+        buttonEditProfile.setOnClickListener(v -> editarPerfil());
+
     }
 
     private void obterUsuarioPorId(String id) {
@@ -63,6 +65,53 @@ public class UserProfileActivity extends AppCompatActivity {
             public void onError(String errorMessage) {
                 Log.e("UserProfileActivity", "Erro ao obter usuário: " + errorMessage);
                 Toast.makeText(UserProfileActivity.this, "Erro ao obter usuário: " + errorMessage, Toast.LENGTH_SHORT).show();
+            }
+        });
+    }
+
+    private void editarPerfil() {
+        String nome = editTextFullName.getText().toString();
+        String email = editTextRegisterEmail.getText().toString();
+        String telefone = editTextPhone.getText().toString();
+        String senha = editTextRegisterPassword.getText().toString();
+        String confirmaSenha = editTextConfirmPassword.getText().toString();
+
+        usuario.setNome(nome);
+        usuario.setEmail(email);
+        usuario.setTelefone(telefone);
+
+        if (!senha.isEmpty()) {
+            if(!senha.equals(confirmaSenha)) {
+                Toast.makeText(this, "As senhas não coincidem.", Toast.LENGTH_SHORT).show();
+                editTextRegisterPassword.setError("As senhas não coincidem.");
+                editTextConfirmPassword.setError("As senhas não coincidem.");
+                editTextRegisterPassword.requestFocus();
+
+                return;
+            }
+
+            usuario.setSenha(senha);
+        }
+
+        enviarEditarPerfil();
+    }
+
+    private void enviarEditarPerfil() {
+        UsuarioApiClient.getInstance(this).alterarUsuario(usuario, new UsuarioApiClient.AlterarUsuarioCallback() {
+            @Override
+            public void onSuccess(Usuario usuarioAlterado) {
+                Toast.makeText(UserProfileActivity.this, "Perfil editado com sucesso!", Toast.LENGTH_SHORT).show();
+
+                SharedPreferences preferences = getSharedPreferences(Constants.SHARED_PREFERENCES_AUTENTICACAO, MODE_PRIVATE);
+                SharedPreferences.Editor editor = preferences.edit();
+                editor.putString("nomeUsuario", usuarioAlterado.getNome());
+                editor.putString("emailUsuario", usuarioAlterado.getEmail());
+            }
+
+            @Override
+            public void onError(String errorMessage) {
+                Log.e("UserProfileActivity", "Erro ao editar perfil: " + errorMessage);
+                Toast.makeText(UserProfileActivity.this, "Erro ao editar perfil: " + errorMessage, Toast.LENGTH_SHORT).show();
             }
         });
     }

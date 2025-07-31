@@ -40,6 +40,11 @@ public class UsuarioApiClient extends BaseApiClient {
         void onError(String errorMessage);
     }
 
+    public interface AlterarUsuarioCallback {
+        void onSuccess(Usuario usuarioAlterado);
+        void onError(String errorMessage);
+    }
+
     public interface LoginCallback {
         void onSuccess(Usuario usuarioLogado);
         void onError(String errorMessage);
@@ -127,6 +132,42 @@ public class UsuarioApiClient extends BaseApiClient {
                     }
                 }
         );
+        addToRequestQueue(jsonObjectRequest);
+    }
+
+    public void alterarUsuario(Usuario usuario, final AlterarUsuarioCallback callback) {
+        String url = Constants.BASE_URL + "usuarios/" + usuario.getId();
+
+        JSONObject requestBody = new JSONObject();
+        try {
+            requestBody.put("nome", usuario.getNome());
+            requestBody.put("email", usuario.getEmail());
+            requestBody.put("telefone", usuario.getTelefone());
+            requestBody.put("senha", usuario.getSenha());
+        } catch (JSONException e) {
+            e.printStackTrace();
+            callback.onError("Erro ao preparar dados do usuário para alteração.");
+            return;
+        }
+
+        JsonObjectRequest jsonObjectRequest = new JsonObjectRequest(
+                Request.Method.PUT, url, requestBody,
+                new Response.Listener<JSONObject>() {
+                    @Override
+                    public void onResponse(JSONObject response) {
+                        callback.onSuccess(usuario);
+                    }
+                },
+                new Response.ErrorListener() {
+                    @Override
+                    public void onErrorResponse(VolleyError error) {
+                        String errorMessage = "Erro ao alterar usuário.";
+                        Log.e("UsuarioApiClient", errorMessage, error);
+                        callback.onError(errorMessage);
+                    }
+                }
+        );
+
         addToRequestQueue(jsonObjectRequest);
     }
 
