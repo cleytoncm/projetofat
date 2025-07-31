@@ -1,6 +1,8 @@
 package com.app.lanchonete.model;
 
-public class Produto {
+import java.io.Serializable;
+
+public class Produto implements Serializable {
 
     private int id;
     private String nome;

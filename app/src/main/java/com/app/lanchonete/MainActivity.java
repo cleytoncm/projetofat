@@ -43,34 +43,18 @@ public class MainActivity extends AppCompatActivity {
         setContentView(R.layout.activity_main);
 
         listagemProdutoDestaque = findViewById(R.id.recycler_view_featured_products);
-        listagemProdutoDestaque.setLayoutManager(new LinearLayoutManager(this));
+        listagemProdutoDestaque.setLayoutManager(new LinearLayoutManager(this, LinearLayoutManager.HORIZONTAL, false));
 
         obterProdutosDestaques();
 
         linearButtonLanches = findViewById(R.id.category_lanches);
-        linearButtonLanches.setOnClickListener(new View.OnClickListener() {
-            @Override
-            public void onClick(View v) {
-                irCatalogo(v, "L");
-            }
-        });
+        linearButtonLanches.setOnClickListener(v -> irCatalogo("Lanches"));
 
         linearButtonPorcoes = findViewById(R.id.category_porcoes);
-        linearButtonPorcoes.setOnClickListener(new View.OnClickListener() {
-            @Override
-            public void onClick(View v) {
-                irCatalogo(v, "P");
-            }
-        });
+        linearButtonPorcoes.setOnClickListener(v -> irCatalogo("Porções"));
 
         linearButtonBebidas = findViewById(R.id.category_bebidas);
-        linearButtonBebidas.setOnClickListener(new View.OnClickListener() {
-            @Override
-            public void onClick(View v) {
-                irCatalogo(v, "B");
-            }
-        });
-
+        linearButtonBebidas.setOnClickListener(v -> irCatalogo("Bebidas"));
     }
 
     private void obterProdutosDestaques() {
@@ -83,15 +67,14 @@ public class MainActivity extends AppCompatActivity {
 
             @Override
             public void onError(String errorMessage) {
-                Toast.makeText(MainActivity.this, "Erro ao listar produtos: " + errorMessage, Toast.LENGTH_LONG).show();
+                Toast.makeText(MainActivity.this, "Erro ao listar produtos em destaque: " + errorMessage, Toast.LENGTH_LONG).show();
             }
         });
     }
 
-    public void irCatalogo(View view, String categoria) {
+    public void irCatalogo(String categoria) {
         Intent intent = new Intent(MainActivity.this, CatologActivity.class);
         intent.putExtra(Constants.INTENT_CATEGORIA, categoria);
         startActivity(intent);
     }
-
 }

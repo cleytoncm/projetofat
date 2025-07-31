@@ -51,6 +51,16 @@
             android:textColor="@color/terracota_suave"
             android:textSize="16sp" />
 
+        <TextView
+            android:id="@+id/text_view_cart_subtotal"
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            android:layout_marginTop="4dp"
+            android:text="Subtotal: R$ 00,00"
+            android:textColor="@color/azul_acinzentado"
+            android:textSize="14sp"
+            android:textStyle="italic"/>
+
     </LinearLayout>
 
     <LinearLayout
@@ -70,8 +80,7 @@
             android:orientation="horizontal">
 
             <Button
-                android:id="@+id/button_cart_decrease_quantity"
-                android:layout_width="36dp"
+                android:id="@+id/button_decrease_cart_quantity" android:layout_width="36dp"
                 android:layout_height="36dp"
                 android:backgroundTint="@color/terracota_suave"
                 android:gravity="center"
@@ -91,8 +100,7 @@
                 android:textStyle="bold" />
 
             <Button
-                android:id="@+id/button_cart_increase_quantity"
-                android:layout_width="36dp"
+                android:id="@+id/button_increase_cart_quantity" android:layout_width="36dp"
                 android:layout_height="36dp"
                 android:backgroundTint="@color/terracota_suave"
                 android:gravity="center"
@@ -102,18 +110,16 @@
                 android:textSize="16sp" />
         </LinearLayout>
 
-        <Button
-            android:id="@+id/button_cart_remove_item"
-            style="?attr/materialButtonOutlinedStyle"
-            android:layout_width="wrap_content"
+        <ImageButton
+            android:id="@+id/button_remove_item" android:layout_width="wrap_content"
             android:layout_height="wrap_content"
             android:layout_marginTop="8dp"
-            android:backgroundTint="@android:color/holo_red_dark"
-            android:paddingHorizontal="10dp"
-            android:paddingVertical="6dp"
-            android:text="Remover"
-            android:textColor="@android:color/white"
-            android:textSize="12sp" />
+            android:background="?attr/selectableItemBackgroundBorderless"
+            android:padding="4dp"
+            android:src="@drawable/ic_delete"
+            app:tint="@android:color/holo_red_dark"
+            android:contentDescription="Remover Item" />
+
     </LinearLayout>
 
 </androidx.constraintlayout.widget.ConstraintLayout>

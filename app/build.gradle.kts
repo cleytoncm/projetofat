@@ -40,6 +40,7 @@ dependencies {
     implementation(libs.volley)
     implementation(libs.glide.glide)
     implementation(libs.play.services.maps)
+    implementation("com.google.code.gson:gson:2.10.1")
     annotationProcessor(libs.glide.compiler)
     testImplementation(libs.junit)
     androidTestImplementation(libs.ext.junit)

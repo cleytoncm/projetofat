@@ -5,14 +5,17 @@ import android.content.Intent;
 import android.view.LayoutInflater;
 import android.view.View;
 import android.view.ViewGroup;
+import android.widget.Button;
 import android.widget.ImageView;
 import android.widget.TextView;
+import android.widget.Toast;
 
 import androidx.annotation.NonNull;
 import androidx.recyclerview.widget.RecyclerView;
 
 import com.app.lanchonete.ProductDetailActivity;
 import com.app.lanchonete.R;
+import com.app.lanchonete.data.CarrinhoSingleton;
 import com.app.lanchonete.model.Produto;
 import com.app.lanchonete.utils.Constants;
 import com.bumptech.glide.Glide;
@@ -35,6 +38,7 @@ public class ProdutoAdapter extends RecyclerView.Adapter<ProdutoAdapter.ProdutoV
         public TextView nomeProduto;
         public TextView descricaoProduto;
         public TextView precoProduto;
+        public Button buttonAddToCart;
 
         public ProdutoViewHolder(View itemView) {
             super(itemView);
@@ -42,6 +46,7 @@ public class ProdutoAdapter extends RecyclerView.Adapter<ProdutoAdapter.ProdutoV
             nomeProduto = itemView.findViewById(R.id.product_name);
             descricaoProduto = itemView.findViewById(R.id.product_description_short);
             precoProduto = itemView.findViewById(R.id.product_price);
+            buttonAddToCart = itemView.findViewById(R.id.button_add_to_cart);
         }
     }
 
@@ -72,8 +77,14 @@ public class ProdutoAdapter extends RecyclerView.Adapter<ProdutoAdapter.ProdutoV
             public void onClick(View v) {
                 Intent intent = new Intent(context, ProductDetailActivity.class);
                 intent.putExtra(Constants.INTENT_PRODUTO_ID, String.valueOf(produto.getId()));
+                intent.putExtra("produto", produto);
                 context.startActivity(intent);
             }
+        });
+
+        holder.buttonAddToCart.setOnClickListener(v -> {
+            CarrinhoSingleton.getInstance(context).adicionarProduto(produto);
+            Toast.makeText(context, produto.getNome() + " adicionado ao carrinho!", Toast.LENGTH_SHORT).show();
         });
     }
 
