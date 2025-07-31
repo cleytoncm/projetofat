@@ -4,6 +4,7 @@ import android.content.Intent;
 import android.content.SharedPreferences;
 import android.os.Bundle;
 import android.text.TextUtils;
+import android.util.Log;
 import android.util.Patterns;
 import android.view.View;
 import android.widget.Button;
@@ -14,6 +15,7 @@ import androidx.appcompat.app.AppCompatActivity;
 
 import com.app.lanchonete.data.remote.UsuarioApiClient;
 import com.app.lanchonete.model.Usuario;
+import com.app.lanchonete.utils.Constants;
 
 public class LoginActivity extends AppCompatActivity {
 
@@ -83,11 +85,12 @@ public class LoginActivity extends AppCompatActivity {
             public void onSuccess(Usuario usuarioLogado) {
                 Toast.makeText(LoginActivity.this, "Login bem-sucedido! Bem-vindo(a), " + usuarioLogado.getNome() + "!", Toast.LENGTH_SHORT).show();
 
-                SharedPreferences preferences = getSharedPreferences("lanchonete.autenticacao", MODE_PRIVATE);
+                SharedPreferences preferences = getSharedPreferences(Constants.SHARED_PREFERENCES_AUTENTICACAO, MODE_PRIVATE);
                 SharedPreferences.Editor editor = preferences.edit();
                 editor.putBoolean("estaLogado", true);
                 editor.putString("emailUsuario", usuarioLogado.getEmail());
                 editor.putString("nomeUsuario", usuarioLogado.getNome());
+                editor.putString("idUsuario", usuarioLogado.getId());
                 editor.apply();
 
                 Intent intent = new Intent(LoginActivity.this, MainActivity.class);

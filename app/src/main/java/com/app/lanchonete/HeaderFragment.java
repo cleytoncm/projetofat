@@ -19,6 +19,8 @@ import androidx.annotation.NonNull;
 import androidx.annotation.Nullable;
 import androidx.fragment.app.Fragment;
 
+import com.app.lanchonete.utils.Constants;
+
 public class HeaderFragment extends Fragment {
 
     private TextView textViewLoggedInUser;
@@ -102,13 +104,13 @@ public class HeaderFragment extends Fragment {
     }
 
     private void loadUserName() {
-        SharedPreferences preferences = getActivity().getSharedPreferences("lanchonete.autenticacao", MODE_PRIVATE);
+        SharedPreferences preferences = getActivity().getSharedPreferences(Constants.SHARED_PREFERENCES_AUTENTICACAO, MODE_PRIVATE);
         String userName = preferences.getString("nomeUsuario", "");
         textViewLoggedInUser.setText("Olá, " + userName + "!");
     }
 
     public void logout() {
-        SharedPreferences preferences = getActivity().getSharedPreferences("lanchonete.autenticacao", MODE_PRIVATE);
+        SharedPreferences preferences = getActivity().getSharedPreferences(Constants.SHARED_PREFERENCES_AUTENTICACAO, MODE_PRIVATE);
         SharedPreferences.Editor editor = preferences.edit();
         editor.clear();
         editor.apply();

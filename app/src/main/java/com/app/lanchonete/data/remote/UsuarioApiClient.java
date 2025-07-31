@@ -46,6 +46,11 @@ public class UsuarioApiClient extends BaseApiClient {
         void onCredenciaisInvalidas();
     }
 
+    public interface UsuarioPorIdCallback {
+        void onSuccess(Usuario usuario);
+        void onError(String errorMessage);
+    }
+
     public void verificarEmailUnico(String email, final EmailCheckCallback callback) {
         String url = Constants.BASE_URL + "usuarios?email=" + email;
 
@@ -178,5 +183,48 @@ public class UsuarioApiClient extends BaseApiClient {
                 }
         );
         addToRequestQueue(jsonArrayRequest);
+    }
+
+    public void obterUsuarioPorId(String id, final UsuarioPorIdCallback callback) {
+        String url = Constants.BASE_URL + "usuarios/" + id;
+
+        JsonObjectRequest jsonObjectRequest = new JsonObjectRequest(
+                Request.Method.GET, url, null,
+                new Response.Listener<JSONObject>() {
+                    @Override
+                    public void onResponse(JSONObject response) {
+                        if (response != null) {
+                            try {
+                                String nome = response.getString("nome");
+                                String email = response.getString("email");
+                                String telefone = response.getString("telefone");
+                                String senha = response.getString("senha");
+
+                                Usuario usuario = new Usuario(nome, email, telefone, senha);
+                                usuario.setId(id);
+                                callback.onSuccess(usuario);
+
+                            } catch (JSONException e) {
+                                callback.onError("Erro de parseamento do JSON: " + e.getMessage());
+                            }
+                        } else {
+                            callback.onError("Usuário não encontrado ou resposta vazia.");
+                        }
+                    }
+                },
+                new Response.ErrorListener() {
+                    @Override
+                    public void onErrorResponse(VolleyError error) {
+                        String errorMessage = "Erro ao obter usuário.";
+                        if (error != null && error.getMessage() != null) {
+                            errorMessage += ": " + error.getMessage();
+                        }
+                        callback.onError(errorMessage);
+                    }
+
+                }
+        );
+
+        addToRequestQueue(jsonObjectRequest);
     }
 }
