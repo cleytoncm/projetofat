@@ -13,6 +13,7 @@ import androidx.recyclerview.widget.RecyclerView;
 
 import com.app.lanchonete.adapter.CarrinhoAdapter;
 import com.app.lanchonete.data.CarrinhoSingleton;
+import com.app.lanchonete.PaymentActivity;
 import com.app.lanchonete.model.ItemCarrinho;
 
 import java.text.NumberFormat;
@@ -53,7 +54,8 @@ public class CartActivity extends AppCompatActivity {
                 Toast.makeText(this, "Seu carrinho está vazio!", Toast.LENGTH_SHORT).show();
                 return;
             }
-            Toast.makeText(this, "Prosseguindo para o checkout!", Toast.LENGTH_SHORT).show();
+            Intent intent = new Intent(this, PaymentActivity.class);
+            startActivity(intent);
         });
     }
 

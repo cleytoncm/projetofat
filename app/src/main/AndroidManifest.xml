@@ -21,9 +21,6 @@
             android:name=".MyOrdersActivity"
             android:exported="false" />
         <activity
-            android:name=".OrderTrackingActivity"
-            android:exported="false" />
-        <activity
             android:name=".PaymentActivity"
             android:exported="false" />
         <activity

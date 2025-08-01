@@ -8,6 +8,9 @@ import com.android.volley.Response;
 import com.android.volley.VolleyError;
 import com.android.volley.toolbox.JsonArrayRequest;
 import com.android.volley.toolbox.JsonObjectRequest;
+import com.app.lanchonete.model.ItemCarrinho;
+import com.app.lanchonete.model.Pedido;
+import com.app.lanchonete.model.Produto;
 import com.app.lanchonete.model.Usuario;
 import com.app.lanchonete.utils.Constants;
 
@@ -15,16 +18,28 @@ import org.json.JSONArray;
 import org.json.JSONException;
 import org.json.JSONObject;
 
+import java.text.ParseException;
 import java.util.ArrayList;
+import java.text.SimpleDateFormat;
 import java.util.List;
+import java.util.Locale;
+import java.util.TimeZone;
+import java.util.Date;
 
 public class UsuarioApiClient extends BaseApiClient {
 
     private static UsuarioApiClient instance;
     private Usuario usuarioLogado;
+    private SimpleDateFormat dateFormat;
+
 
     private UsuarioApiClient(Context ctx) {
         super(ctx);
+        // Configura o formato da data para o padrão ISO 8601 de forma segura,
+        // usando Locale.US para evitar problemas de localização.
+        dateFormat = new SimpleDateFormat("yyyy-MM-dd'T'HH:mm:ss", Locale.US);
+        // Define o fuso horário para UTC-3, que corresponde ao fuso horário de São Paulo.
+        dateFormat.setTimeZone(TimeZone.getTimeZone("America/Sao_Paulo"));
     }
 
     public static synchronized UsuarioApiClient getInstance(Context context) {
@@ -44,10 +59,6 @@ public class UsuarioApiClient extends BaseApiClient {
 
     public void logout() {
         this.usuarioLogado = null;
-    }
-
-    public boolean isUsuarioLogado() {
-        return usuarioLogado != null;
     }
 
     public interface EmailCheckCallback {
@@ -86,6 +97,10 @@ public class UsuarioApiClient extends BaseApiClient {
         void onError(String errorMessage);
     }
 
+    public interface SalvarPedidoCallback {
+        void onSuccess(Usuario usuarioComPedidoSalvo);
+        void onError(String errorMessage);
+    }
 
     public void verificarEmailUnico(String email, final EmailCheckCallback callback) {
         String url = Constants.BASE_URL + "usuarios?email=" + email;
@@ -142,15 +157,13 @@ public class UsuarioApiClient extends BaseApiClient {
                     @Override
                     public void onResponse(JSONObject response) {
                         try {
-                            String id = response.getString("id");
-                            usuario.setId(id);
+                            Usuario usuarioCadastrado = parseUsuarioFromJson(response);
                             JSONArray pedidosArray = response.optJSONArray("pedidos");
                             if (pedidosArray != null) {
-                                ArrayList<Object> pedidosList = new ArrayList<>();
-                                for (int i = 0; i < pedidosArray.length(); i++) {
-                                    pedidosList.add(pedidosArray.get(i));
-                                }
-                                usuario.setPedidos(pedidosList);
+                                // Convertendo List<Pedido> para List<Object>
+                                List<Pedido> pedidos = parsePedidosFromJsonArray(pedidosArray);
+                                List<Object> pedidosObj = new ArrayList<>(pedidos);
+                                usuarioCadastrado.setPedidos(pedidosObj);
                             }
                             JSONArray enderecoArray = response.optJSONArray("endereco");
                             if (enderecoArray != null) {
@@ -158,10 +171,10 @@ public class UsuarioApiClient extends BaseApiClient {
                                 for (int i = 0; i < enderecoArray.length(); i++) {
                                     enderecoList.add(enderecoArray.get(i));
                                 }
-                                usuario.setEndereco(enderecoList);
+                                usuarioCadastrado.setEndereco(enderecoList);
                             }
 
-                            callback.onSuccess(usuario);
+                            callback.onSuccess(usuarioCadastrado);
                         } catch (JSONException e) {
                             e.printStackTrace();
                             callback.onError("Erro ao processar resposta de cadastro.");
@@ -271,13 +284,13 @@ public class UsuarioApiClient extends BaseApiClient {
                                 if (senhaApi.equals(senha)) {
                                     Usuario usuarioAutenticado = new Usuario(nome, emailApi, telefone, senhaApi);
                                     usuarioAutenticado.setId(id);
+
                                     JSONArray pedidosArray = usuarioJson.optJSONArray("pedidos");
                                     if (pedidosArray != null) {
-                                        ArrayList<Object> pedidosList = new ArrayList<>();
-                                        for (int i = 0; i < pedidosArray.length(); i++) {
-                                            pedidosList.add(pedidosArray.get(i));
-                                        }
-                                        usuarioAutenticado.setPedidos(pedidosList);
+                                        // Convertendo List<Pedido> para List<Object>
+                                        List<Pedido> pedidos = parsePedidosFromJsonArray(pedidosArray);
+                                        List<Object> pedidosObj = new ArrayList<>(pedidos);
+                                        usuarioAutenticado.setPedidos(pedidosObj);
                                     }
                                     JSONArray enderecoArray = usuarioJson.optJSONArray("endereco");
                                     if (enderecoArray != null) {
@@ -287,7 +300,6 @@ public class UsuarioApiClient extends BaseApiClient {
                                         }
                                         usuarioAutenticado.setEndereco(enderecoList);
                                     }
-
                                     callback.onSuccess(usuarioAutenticado);
                                 } else {
                                     callback.onCredenciaisInvalidas();
@@ -372,11 +384,10 @@ public class UsuarioApiClient extends BaseApiClient {
                                 Usuario usuario = parseUsuarioFromJson(response);
                                 JSONArray pedidosArray = response.optJSONArray("pedidos");
                                 if (pedidosArray != null) {
-                                    ArrayList<Object> pedidosList = new ArrayList<>();
-                                    for (int i = 0; i < pedidosArray.length(); i++) {
-                                        pedidosList.add(pedidosArray.get(i));
-                                    }
-                                    usuario.setPedidos(pedidosList);
+                                    // Convertendo List<Pedido> para List<Object>
+                                    List<Pedido> pedidos = parsePedidosFromJsonArray(pedidosArray);
+                                    List<Object> pedidosObj = new ArrayList<>(pedidos);
+                                    usuario.setPedidos(pedidosObj);
                                 }
                                 JSONArray enderecoArray = response.optJSONArray("endereco");
                                 if (enderecoArray != null) {
@@ -437,9 +448,8 @@ public class UsuarioApiClient extends BaseApiClient {
                 for (Object item : usuario.getPedidos()) {
                     if (item instanceof JSONObject) {
                         pedidosArray.put(item);
-                    } else {
-                        Log.w("UsuarioApiClient", "Item de pedido não é JSONObject, pode haver problema no PUT.");
-                        pedidosArray.put(item.toString());
+                    } else if (item instanceof Pedido) {
+                        pedidosArray.put(pedidoToJson((Pedido) item));
                     }
                 }
                 requestBody.put("pedidos", pedidosArray);
@@ -477,11 +487,10 @@ public class UsuarioApiClient extends BaseApiClient {
                             Usuario usuarioAtualizado = parseUsuarioFromJson(response);
                             JSONArray pedidosArray = response.optJSONArray("pedidos");
                             if (pedidosArray != null) {
-                                ArrayList<Object> pedidosList = new ArrayList<>();
-                                for (int i = 0; i < pedidosArray.length(); i++) {
-                                    pedidosList.add(pedidosArray.get(i));
-                                }
-                                usuarioAtualizado.setPedidos(pedidosList);
+                                // Convertendo List<Pedido> para List<Object>
+                                List<Pedido> pedidos = parsePedidosFromJsonArray(pedidosArray);
+                                List<Object> pedidosObj = new ArrayList<>(pedidos);
+                                usuarioAtualizado.setPedidos(pedidosObj);
                             }
                             JSONArray enderecoArray = response.optJSONArray("endereco");
                             if (enderecoArray != null) {
@@ -521,6 +530,172 @@ public class UsuarioApiClient extends BaseApiClient {
         );
         addToRequestQueue(jsonObjectRequest);
     }
+
+    public void salvarNovoPedido(Pedido pedido, final SalvarPedidoCallback callback) {
+        Usuario usuario = getUsuarioLogado();
+
+        if (usuario == null) {
+            callback.onError("Usuário não está logado.");
+            return;
+        }
+
+        obterUsuarioCompletoPorId(usuario.getId(), new UsuarioCompletoCallback() {
+            @Override
+            public void onSuccess(Usuario usuarioAtualizado) {
+                setUsuarioLogado(usuarioAtualizado);
+
+                if (usuarioAtualizado.getPedidos() == null) {
+                    usuarioAtualizado.setPedidos(new ArrayList<>());
+                }
+
+                try {
+                    JSONObject pedidoJson = pedidoToJson(pedido);
+                    usuarioAtualizado.getPedidos().add(pedidoJson);
+                } catch (JSONException e) {
+                    callback.onError("Erro ao converter pedido para JSON: " + e.getMessage());
+                    return;
+                }
+
+                atualizarUsuarioCompleto(usuarioAtualizado, new AtualizarUsuarioCompletoCallback() {
+                    @Override
+                    public void onSuccess(Usuario usuarioComPedidoSalvo) {
+                        setUsuarioLogado(usuarioComPedidoSalvo);
+                        callback.onSuccess(usuarioComPedidoSalvo);
+                    }
+
+                    @Override
+                    public void onError(String errorMessage) {
+                        callback.onError("Erro ao salvar o pedido: " + errorMessage);
+                    }
+                });
+            }
+
+            @Override
+            public void onError(String errorMessage) {
+                callback.onError("Erro ao obter dados do usuário antes de salvar o pedido: " + errorMessage);
+            }
+        });
+    }
+
+    private JSONObject pedidoToJson(Pedido pedido) throws JSONException {
+        JSONObject pedidoJson = new JSONObject();
+        pedidoJson.put("id", pedido.getId());
+        pedidoJson.put("total", pedido.getTotal());
+        pedidoJson.put("metodoPagamento", pedido.getMetodoPagamento());
+        pedidoJson.put("dataDoPedido", dateFormat.format(pedido.getDataDoPedido()));
+
+        JSONArray itensJsonArray = new JSONArray();
+        for (ItemCarrinho item : pedido.getItens()) {
+            if (item.getProduto() != null) {
+                JSONObject itemJson = new JSONObject();
+                itemJson.put("quantidade", item.getQuantidade());
+
+                JSONObject produtoJson = new JSONObject();
+                produtoJson.put("id", item.getProduto().getId());
+                produtoJson.put("nome", item.getProduto().getNome());
+                produtoJson.put("descricao", item.getProduto().getDescricao());
+                produtoJson.put("preco", item.getProduto().getPreco());
+                produtoJson.put("imageUrl", item.getProduto().getImagemUrl());
+                produtoJson.put("categoria", item.getProduto().getCategoria());
+
+                itemJson.put("produto", produtoJson);
+                itensJsonArray.put(itemJson);
+            } else {
+                Log.e("UsuarioApiClient", "Item do pedido com produto nulo. Ignorando este item.");
+            }
+        }
+        pedidoJson.put("itens", itensJsonArray);
+
+        return pedidoJson;
+    }
+
+    private List<Pedido> parsePedidosFromJsonArray(JSONArray pedidosArray) {
+        List<Pedido> pedidos = new ArrayList<>();
+        for (int i = 0; i < pedidosArray.length(); i++) {
+            try {
+                JSONObject pedidoJson = pedidosArray.getJSONObject(i);
+                pedidos.add(parsePedidoFromJson(pedidoJson));
+            } catch (JSONException e) {
+                Log.e("UsuarioApiClient", "Erro ao parsear pedido do JSON.", e);
+            }
+        }
+        return pedidos;
+    }
+
+    private Pedido parsePedidoFromJson(JSONObject jsonObject) {
+        try {
+            String id = jsonObject.getString("id");
+            double total = jsonObject.getDouble("total");
+            String metodoPagamento = jsonObject.getString("metodoPagamento");
+            String dataDoPedidoString = jsonObject.getString("dataDoPedido");
+
+            Date dataDoPedido = null;
+            try {
+                dataDoPedido = dateFormat.parse(dataDoPedidoString);
+            } catch (ParseException e) {
+                Log.e("UsuarioApiClient", "Erro ao parsear a data do pedido: " + dataDoPedidoString, e);
+            }
+
+            JSONArray itensJsonArray = jsonObject.getJSONArray("itens");
+            List<ItemCarrinho> itens = parseItensCarrinhoFromJsonArray(itensJsonArray);
+
+            Pedido pedido = new Pedido();
+            pedido.setId(id);
+            pedido.setTotal(total);
+            pedido.setMetodoPagamento(metodoPagamento);
+            pedido.setDataDoPedido(dataDoPedido);
+            pedido.setItens(itens);
+
+            return pedido;
+
+        } catch (JSONException e) {
+            Log.e("UsuarioApiClient", "Erro ao parsear JSON para Pedido.", e);
+            return null;
+        }
+    }
+
+    private List<ItemCarrinho> parseItensCarrinhoFromJsonArray(JSONArray itensArray) {
+        List<ItemCarrinho> itens = new ArrayList<>();
+        for (int i = 0; i < itensArray.length(); i++) {
+            try {
+                JSONObject itemJson = itensArray.getJSONObject(i);
+                itens.add(parseItemCarrinhoFromJson(itemJson));
+            } catch (JSONException e) {
+                Log.e("UsuarioApiClient", "Erro ao parsear item do JSON.", e);
+            }
+        }
+        return itens;
+    }
+
+    private ItemCarrinho parseItemCarrinhoFromJson(JSONObject jsonObject) {
+        try {
+            int quantidade = jsonObject.getInt("quantidade");
+            JSONObject produtoJson = jsonObject.getJSONObject("produto");
+            Produto produto = parseProdutoFromJson(produtoJson);
+
+            return new ItemCarrinho(produto, quantidade);
+        } catch (JSONException e) {
+            Log.e("UsuarioApiClient", "Erro ao parsear JSON para ItemCarrinho.", e);
+            return null;
+        }
+    }
+
+    private Produto parseProdutoFromJson(JSONObject jsonObject) {
+        try {
+            int id = jsonObject.getInt("id");
+            String nome = jsonObject.getString("nome");
+            String descricao = jsonObject.getString("descricao");
+            double preco = jsonObject.getDouble("preco");
+            String imageUrl = jsonObject.getString("imageUrl");
+            String categoria = jsonObject.getString("categoria");
+
+            return new Produto(id, nome, descricao, preco, imageUrl, categoria);
+        } catch (JSONException e) {
+            Log.e("UsuarioApiClient", "Erro ao parsear JSON para Produto.", e);
+            return null;
+        }
+    }
+
 
     private Usuario parseUsuarioFromJson(JSONObject jsonObject) throws JSONException {
         String id = jsonObject.getString("id");
